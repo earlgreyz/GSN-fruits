@@ -21,9 +21,7 @@ def train(net: Net, data_path: str, batch_size: int, num_epochs: int, learning_r
 
     for epoch in range(num_epochs):  # loop over the dataset multiple times
         running_loss = 0.0
-
-        def show_loss(item):
-            return '[{}, {:3f}]'.format(epoch + 1, running_loss / 500)
+        show_loss = lambda _: '[{}, {:3f}]'.format(epoch + 1, running_loss)
 
         with click.progressbar(train_loader, item_show_func=show_loss) as bar:
             for inputs, labels in bar:
