@@ -7,20 +7,21 @@ from fruit import FruitNet
 from train import train
 from test import test
 
-num_epochs = 5
-batch_size = 100
-learning_rate = 0.01
-
 
 @click.command()
 @click.option('--load-model', '-m', default=None)
 @click.option('--save-model', '-s', default=None)
-@click.option('--epochs', '-e', default=5)
 @click.option('--train-dataset', '-d', default='./dataset/Training')
 @click.option('--test-dataset', '-t', default='./dataset/Test')
 @click.option('--no-train', is_flag=True, default=False)
 @click.option('--no-test', is_flag=True, default=False)
-def main(load_model: str, save_model: str, epochs: int, train_dataset: str, test_dataset: str, no_train: bool, no_test: bool):
+@click.option('--epochs', '-e', default=5)
+@click.option('--batch-size', '-b', default=100)
+@click.option('--learning-rate', '-l', default=0.01)
+def main(load_model: str, save_model: str,
+            train_dataset: str, test_dataset: str,
+            no_train: bool, no_test: bool,
+            epochs: int, batch_size: int, learning_rate: float):
     net = FruitNet()
 
     if load_model is not None:
@@ -34,7 +35,7 @@ def main(load_model: str, save_model: str, epochs: int, train_dataset: str, test
     if not no_train:
         click.echo('Training net using {}'.format(train_dataset))
         net.train()
-        train(net, data_path=train_dataset, batch_size=100, num_epochs=epochs, learning_rate=0.01)
+        train(net, data_path=train_dataset, batch_size=batch_size, num_epochs=epochs, learning_rate=learning_rate)
 
     if not no_train and save_model is not None:
         click.echo('Saving model as \'{}\''.format(save_model))
