@@ -8,14 +8,14 @@ from torchvision.transforms import transforms
 from fruit import FruitNet
 
 
-def train(model: FruitNet, data_path: str, batch_size: int, num_epochs: int, learning_rate: float):
+def train(net: FruitNet, data_path: str, batch_size: int, num_epochs: int, learning_rate: float):
     trans = transforms.Compose([transforms.ToTensor(), ])
 
     train_dataset = torchvision.datasets.ImageFolder(root=data_path, transform=trans)
     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
 
     criterion = nn.CrossEntropyLoss()
-    optimizer = adam.Adam(model.parameters(), lr=learning_rate)
+    optimizer = adam.Adam(net.parameters(), lr=learning_rate)
 
     for epoch in range(num_epochs):  # loop over the dataset multiple times
         running_loss = 0.0
@@ -30,7 +30,7 @@ def train(model: FruitNet, data_path: str, batch_size: int, num_epochs: int, lea
             optimizer.zero_grad()
 
             # forward + backward + optimize
-            outputs = model(inputs)
+            outputs = net(inputs)
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
