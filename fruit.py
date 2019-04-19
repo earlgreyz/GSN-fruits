@@ -8,14 +8,16 @@ class FruitNet(nn.Module):
         self.conv1 = nn.Conv2d(in_channels=3, out_channels=10, kernel_size=5)
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
         self.conv2 = nn.Conv2d(in_channels=10, out_channels=20, kernel_size=5)
-        self.fc = nn.Linear(9680, 95)
+        self.fc1 = nn.Linear(9680, 256)
+        self.fc2 = nn.Linear(256, 95)
 
     def forward(self, x):
         in_size = x.size(0)
         x = self.pool(F.relu(self.conv1(x)))
         x = self.pool(F.relu(self.conv2(x)))
         x = x.view(in_size, -1)
-        x = self.fc(x)
+        x = F.relu(self.fc1(x))
+        x = self.fc2(x)
         return x
 
     def num_flat_features(self, x):

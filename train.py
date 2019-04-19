@@ -1,3 +1,5 @@
+import click
+
 from torch import nn, cuda
 from torch.optim import adam
 from torch.utils.data import DataLoader
@@ -19,24 +21,23 @@ def train(net: FruitNet, data_path: str, batch_size: int, num_epochs: int, learn
 
     for epoch in range(num_epochs):  # loop over the dataset multiple times
         running_loss = 0.0
-        for i, data in enumerate(train_loader, 0):
-            print('\r[{}, {:5d}] loss: {:3f}'.format(epoch + 1, i + 1, running_loss / 100), end='')
 
-            inputs, labels = data
-            if cuda.is_available():
-                inputs, labels = inputs.to('cuda'), labels.to('cuda')
+        def show_loss(item):
+            return '[{}, {:3f}]'.format(epoch + 1, running_loss / 500)
 
-            # zero the parameter gradients
-            optimizer.zero_grad()
+        with click.progressbar(train_loader, item_show_func=show_loss) as bar:
+            for inputs, labels in bar:
+                if cuda.is_available():
+                    inputs, labels = inputs.to('cuda'), labels.to('cuda')
 
-            # forward + backward + optimize
-            outputs = net(inputs)
-            loss = criterion(outputs, labels)
-            loss.backward()
-            optimizer.step()
+                # zero the parameter gradients
+                optimizer.zero_grad()
 
-            # print statistics
-            running_loss += loss.item()
-            if i % 100 == 99:
-                print('\r[{}, {:5d}] loss: {:3f}'.format(epoch + 1, i + 1, running_loss / 100))
-                running_loss = 0.0
+                # forward + backward + optimize
+                outputs = net(inputs)
+                loss = criterion(outputs, labels)
+                loss.backward()
+                optimizer.step()
+
+                # print statistics
+                running_loss += loss.item()

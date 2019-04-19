@@ -15,14 +15,16 @@ learning_rate = 0.01
 @click.command()
 @click.option('--load-model', '-m', default=None)
 @click.option('--save-model', '-s', default=None)
+@click.option('--epochs', '-e', default=5)
 @click.option('--train-dataset', '-d', default='./dataset/Training')
 @click.option('--test-dataset', '-t', default='./dataset/Test')
 @click.option('--no-train', is_flag=True, default=False)
 @click.option('--no-test', is_flag=True, default=False)
-def main(load_model: str, save_model: str, train_dataset: str, test_dataset: str, no_train: bool, no_test: bool):
+def main(load_model: str, save_model: str, epochs: int, train_dataset: str, test_dataset: str, no_train: bool, no_test: bool):
     net = FruitNet()
 
     if load_model is not None:
+        click.echo('Loading model from {}'.format(load_model))
         net = torch.load(load_model)
 
     device = torch.device('cuda:0' if cuda.is_available() else 'cpu')
@@ -32,7 +34,7 @@ def main(load_model: str, save_model: str, train_dataset: str, test_dataset: str
     if not no_train:
         click.echo('Training net using {}'.format(train_dataset))
         net.train()
-        train(net, data_path=train_dataset, batch_size=100, num_epochs=5, learning_rate=0.01)
+        train(net, data_path=train_dataset, batch_size=100, num_epochs=epochs, learning_rate=0.01)
 
     if not no_train and save_model is not None:
         click.echo('Saving model as \'{}\''.format(save_model))
