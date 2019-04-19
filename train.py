@@ -7,10 +7,10 @@ from torch.utils.data import DataLoader
 import torchvision
 from torchvision.transforms import transforms
 
-from fruit import FruitNet
+from net import Net
 
 
-def train(net: FruitNet, data_path: str, batch_size: int, num_epochs: int, learning_rate: float):
+def train(net: Net, data_path: str, batch_size: int, num_epochs: int, learning_rate: float):
     trans = transforms.Compose([transforms.ToTensor(), ])
 
     train_dataset = torchvision.datasets.ImageFolder(root=data_path, transform=trans)
@@ -29,12 +29,6 @@ def train(net: FruitNet, data_path: str, batch_size: int, num_epochs: int, learn
             for inputs, labels in bar:
                 if cuda.is_available():
                     inputs, labels = inputs.to('cuda'), labels.to('cuda')
-
-                mean = inputs.sum(dim=0, keepdim=True) / inputs.size(0)
-                minimum = inputs.min(dim=0, keepdim=True)
-                maximum = inputs.max(dim=0, keepdim=True)
-                variance = ((inputs - mean) ** 2).sum(dim=0, keepdim=True) / inputs.size(0)
-                inputs = (inputs - mean) / ((variance + 1e-8) ** 0.5)
 
                 # zero the parameter gradients
                 optimizer.zero_grad()

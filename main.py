@@ -3,7 +3,7 @@ import torch
 import click
 from torch import cuda
 
-from fruit import FruitNet
+from net import Net
 from train import train
 from test import test
 
@@ -22,7 +22,7 @@ def main(load_model: str, save_model: str,
             train_dataset: str, test_dataset: str,
             no_train: bool, no_test: bool,
             epochs: int, batch_size: int, learning_rate: float):
-    net = FruitNet()
+    net = Net()
 
     if load_model is not None:
         click.echo('Loading model from {}'.format(load_model))
