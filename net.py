@@ -5,15 +5,15 @@ import torch.nn.functional as F
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(in_channels=3, out_channels=8, kernel_size=5)
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels=8, kernel_size=4)
         self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2)
-        self.conv2 = nn.Conv2d(in_channels=8, out_channels=16, kernel_size=5)
+        self.conv2 = nn.Conv2d(in_channels=8, out_channels=16, kernel_size=4)
         self.bn2 = nn.BatchNorm2d(16)
-        self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2)
-        self.conv3 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=5)
+        self.pool2 = nn.MaxPool2d(kernel_size=3, stride=3)
+        self.conv3 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=4)
         self.bn3 = nn.BatchNorm2d(32)
         self.pool3 = nn.MaxPool2d(kernel_size=2, stride=2)
-        self.fc4 = nn.Linear(2592, 512)
+        self.fc4 = nn.Linear(1152, 512)
         self.fc5 = nn.Linear(512, 95)
 
     def forward(self, x):
