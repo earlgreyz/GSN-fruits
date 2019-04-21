@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader
 import torchvision
 from torchvision.transforms import transforms
 
-from net import Net
+from model.net import Net
 
 
 def train(net: Net, data_path: str, batch_size: int, num_epochs: int, learning_rate: float):

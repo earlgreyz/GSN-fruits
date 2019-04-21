@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader
 import torchvision
 from torchvision.transforms import transforms
 
-from net import Net
+from model.net import Net
 
 
 def test(net: Net, data_path: str, batch_size: int) -> float:
