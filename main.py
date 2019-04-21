@@ -25,8 +25,7 @@ def main(load_model: str, save_model: str,
     net = Net()
 
     if load_model is not None:
-        click.echo('Loading model from {}'.format(load_model))
-        net = torch.load(load_model)
+        net.load_state_dict(torch.load(load_model))
 
     device = torch.device('cuda:0' if cuda.is_available() else 'cpu')
     net.to(device)
@@ -39,7 +38,7 @@ def main(load_model: str, save_model: str,
 
     if not no_train and save_model is not None:
         click.echo('Saving model as \'{}\''.format(save_model))
-        torch.save(net, save_model)
+        torch.save(net.state_dict(), save_model)
 
     if not no_test:
         click.echo('Testing net using {}'.format(test_dataset))
