@@ -22,14 +22,15 @@ def main(load_model: str, save_model: str,
             train_dataset: str, test_dataset: str,
             no_train: bool, no_test: bool,
             epochs: int, batch_size: int, learning_rate: float):
+    device = torch.device('cuda:0' if cuda.is_available() else 'cpu')
+    click.secho('Using device={}'.format(device), fg='blue')
+
     net = Net()
+    net.to(device)
 
     if load_model is not None:
-        net.load_state_dict(torch.load(load_model))
-
-    device = torch.device('cuda:0' if cuda.is_available() else 'cpu')
-    net.to(device)
-    click.echo('Using device={}'.format(device), color='blue')
+        click.secho('Loading model from \'{}\''.format(load_model), fg='yellow')
+        net.load_state_dict(torch.load(load_model, map_location=device))
 
     if not no_train:
         click.echo('Training net using {}'.format(train_dataset))
@@ -37,14 +38,15 @@ def main(load_model: str, save_model: str,
         train(net, data_path=train_dataset, batch_size=batch_size, num_epochs=epochs, learning_rate=learning_rate)
 
     if not no_train and save_model is not None:
-        click.echo('Saving model as \'{}\''.format(save_model))
+        click.secho('Saving model as \'{}\''.format(save_model), fg='yellow')
         torch.save(net.state_dict(), save_model)
 
     if not no_test:
         click.echo('Testing net using {}'.format(test_dataset))
         net.eval()
-        accuracy = test(net, data_path=test_dataset, batch_size=100)
-        click.echo('Net accuracy={}'.format(accuracy), color='green')
+        accuracy = test(net, data_path=test_dataset, batch_size=batch_size)
+        color = 'green' if accuracy > 97. else 'red'
+        click.secho('Accuracy={}'.format(accuracy), fg=color)
 
 
 if __name__ == '__main__':
