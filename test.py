@@ -14,7 +14,7 @@ def test(net: Net, data_path: str, batch_size: int) -> float:
     trans = transforms.Compose([transforms.ToTensor(), ])
 
     test_dataset = torchvision.datasets.ImageFolder(root=data_path, transform=trans)
-    test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False)
+    test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=True)
 
     correct = 0
     total = 0
