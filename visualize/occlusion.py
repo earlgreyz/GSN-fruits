@@ -5,11 +5,7 @@ import torch.nn.functional as F
 
 import matplotlib.pyplot as plt
 
-
-def _plot_image(img, title):
-    plt.imshow(img)
-    plt.title(title)
-    plt.axis('off')
+from visualize import utils
 
 
 def occlustion(net, image, label, k=10, stride=4):
@@ -33,11 +29,10 @@ def occlustion(net, image, label, k=10, stride=4):
     plt.rcParams["figure.figsize"] = (20, 20)
 
     fig.add_subplot(1, 2, 1)
-    _plot_image(image.transpose(0, 1).transpose(1, 2), 'Original')
+    utils.plot_image(image.transpose(0, 1).transpose(1, 2), 'Original')
 
     fig.add_subplot(1, 2, 2)
-    _plot_image(heatmap, 'Heatmap')
+    utils.plot_image(heatmap, 'Heatmap')
 
     plt.show()
-
     return heatmap

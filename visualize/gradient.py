@@ -1,14 +1,8 @@
-import torch
-
 from torch import nn
 
 import matplotlib.pyplot as plt
 
-
-def _plot_image(img, title):
-    plt.imshow(img)
-    plt.title(title)
-    plt.axis('off')
+from visualize import utils
 
 
 def gradient(net, image, label):
@@ -21,9 +15,7 @@ def gradient(net, image, label):
     loss.backward()
 
     heatmap = input.grad.squeeze()
-    min_heatmap = torch.min(heatmap)
-    range_heatmap = torch.max(heatmap) - min_heatmap
-    heatmap = (heatmap - min_heatmap) / range_heatmap
+    heatmap = utils.normalize_image(heatmap)
 
     image = image.squeeze()
 
@@ -31,9 +23,10 @@ def gradient(net, image, label):
     plt.rcParams["figure.figsize"] = (20, 20)
 
     fig.add_subplot(1, 2, 1)
-    _plot_image(image.transpose(0, 1).transpose(1, 2), 'Original')
+    utils.plot_image(image.transpose(0, 1).transpose(1, 2), 'Original')
 
     fig.add_subplot(1, 2, 2)
-    _plot_image(heatmap.transpose(0, 1).transpose(1, 2), 'Heatmap')
+    utils.plot_image(heatmap.transpose(0, 1).transpose(1, 2), 'Heatmap')
 
     plt.show()
+    return heatmap

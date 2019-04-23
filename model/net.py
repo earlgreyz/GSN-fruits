@@ -1,7 +1,7 @@
 from torch import nn
 import torch.nn.functional as F
 
-from model.batchnorm import BatchNorm
+from nn.batchnorm import BatchNorm
 
 
 class Net(nn.Module):
