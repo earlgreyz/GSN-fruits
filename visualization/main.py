@@ -8,6 +8,7 @@ import torchvision.transforms.functional as F
 
 from model.net import Net
 from visualization.classes import classes
+from visualization.gradient import gradient
 from visualization.occlusion import occlustion
 
 
@@ -39,6 +40,7 @@ def main(model: str, images: [str], occlusion_window: int, occlusion_stride: int
         _, predicted = torch.max(output.data, 1)
         click.echo('Image \'{}\' most likely represents a \'{}\''.format(path, classes[predicted]))
         occlustion(net, image, predicted, k=occlusion_window, stride=occlusion_stride)
+        gradient(net, image, predicted)
 
 
 if __name__ == '__main__':
