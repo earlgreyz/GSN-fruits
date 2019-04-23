@@ -5,8 +5,8 @@ from torch import cuda
 
 from model.net import Net
 
-from train.train import train
-from train.test import test
+from train.train import train as train_net
+from train.test import test as test_net
 
 from visualize import utils
 from visualize.classes import classes
@@ -46,7 +46,7 @@ def train(load_model: str, save_model: str,
     if not no_train:
         click.echo('Training model using {}'.format(train_dataset))
         net.train()
-        train(net, data_path=train_dataset, batch_size=batch_size, num_epochs=epochs, learning_rate=learning_rate)
+        train_net(net, data_path=train_dataset, batch_size=batch_size, num_epochs=epochs, learning_rate=learning_rate)
 
     if not no_train and save_model is not None:
         click.secho('Saving model as \'{}\''.format(save_model), fg='yellow')
@@ -55,7 +55,7 @@ def train(load_model: str, save_model: str,
     if not no_test:
         click.echo('Testing model using {}'.format(test_dataset))
         net.eval()
-        accuracy = test(net, data_path=test_dataset, batch_size=batch_size)
+        accuracy = test_net(net, data_path=test_dataset, batch_size=batch_size)
         color = 'green' if accuracy > 97. else 'red'
         click.secho('Accuracy={}'.format(accuracy), fg=color)
 
